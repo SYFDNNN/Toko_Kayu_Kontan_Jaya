@@ -1,32 +1,39 @@
-# Arsitektur Project
+# Arsitektur Tingkat Tinggi
 
-Project menggunakan pola MVC CodeIgniter 4 dengan Apache sebagai web server dan Docker Compose sebagai environment development.
+Sistem menggunakan pola MVC pada aplikasi web berbasis CodeIgniter 4. Browser
+berinteraksi dengan antarmuka aplikasi dan lapisan API, lalu request diteruskan
+ke controller untuk menjalankan aturan bisnis melalui model serta layanan
+database.
 
 ```text
 Browser / API Client
-        │
-        ▼
-public/index.php
-        │
-        ▼
-app/Config/Routes.php
-        │
-        ├── app/Controllers/Web   # Halaman aplikasi
-        ├── app/Controllers/Api   # Endpoint JSON
-        ├── app/Models             # Akses dan aturan data
-        └── app/Views              # Antarmuka HTML/PHP
-                │
-                ▼
-             MySQL 8.0
+        |
+        v
+Application Layer
+  - Authentication & role-based access
+  - POS, inventory, transaction, reporting
+  - REST API integration
+        |
+        v
+Business Logic & Data Access
+  - Controllers
+  - Models
+  - Database transactions and row locking
+        |
+        v
+      MySQL
 ```
 
-## Pembagian folder
+## Modul utama
 
-- `app/`: kode inti aplikasi dan konfigurasi CodeIgniter.
-- `public/`: satu-satunya document root yang diekspos Apache.
-- `database/`: SQL bootstrap khusus Docker.
-- `docs/`: dokumentasi API, ERD, spesifikasi UI, dan panduan operasional.
-- `tests/`: pengujian unit dan fitur.
-- `writable/`: data runtime yang tidak termasuk source code.
+- **Authentication:** membatasi akses berdasarkan peran owner, admin, dan
+  cashier.
+- **Inventory:** mengelola produk, kategori, pergerakan stok, dan Reorder Point.
+- **Point of Sale:** mengelola keranjang, checkout, invoice, dan pembaruan stok.
+- **Reporting:** menyajikan ringkasan transaksi serta laporan yang dapat
+  diekspor.
+- **API:** menyediakan kapabilitas integrasi untuk data produk, transaksi,
+  inventori, dan dashboard.
 
-Migration dan seeder PHP CodeIgniter tetap berada di `app/Database` agar dapat dijalankan melalui Spark. SQL di root `database/` digunakan oleh proses inisialisasi MySQL Docker.
+Detail implementasi, endpoint, konfigurasi deployment, dan skema database tidak
+disertakan dalam repository showcase ini.
